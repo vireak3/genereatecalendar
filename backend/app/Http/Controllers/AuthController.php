@@ -15,7 +15,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-//        $this->middleware('auth:api', ['except' => ['login']]);
+       $this->middleware('auth:api', ['except' => ['login','signup']]);
     }
 
     /**
@@ -28,7 +28,7 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Email or Password is Incorrect'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -82,12 +82,40 @@ class AuthController extends Controller
         ]);
     }
     public function signup(Request $request){
-//        $validated = $request->validate([
-//            'name'=>'required',
-//            'email'=>'required|email|unique:users',
-//            'password'=>'required|confirmed'
-//        ]);
+       $validated = $request->validate([
+           'name'=>'required',
+           'email'=>'required|email|unique:users',
+           'password'=>'required',
+           'password_confirmation'=>'required|same:password'
+       ]);
         $userData = User::create(['name'=>$request->name,'email'=>$request->email,'password'=>$request->password]);
         return response()->json(["message"=>"User Added",'userData'=>$userData],200);
+    }
+    public function listXlsx(){
+        $myDir = '../storage/app/generated_xlsx';
+        $myFilesXlsx = array();
+        $myFilesXlsx = scandir($myDir);
+        rsort($myFilesXlsx);
+        $myFilesXlsx = array_slice($myFilesXlsx,0,count($myFilesXlsx)-2);
+        return $myFilesXlsx;
+    }
+    public function downloadXls($fileName){
+        return response()->download(storage_path().'/app/public/upload_xls/'.$fileName);
+    }
+    public function downloadXlsx($fileName){
+            return response()->download(storage_path().'/app/public/generated_xlsx/'.$fileName);
+        }
+    public function listXls(){
+        $myDir = '../storage/app/upload_xls';
+        $myFiles = array();
+        $myFiles = scandir($myDir);
+        rsort($myFiles);
+        $myFiles = array_slice($myFiles,0,count($myFiles)-2);
+        return $myFiles;
+    }
+    function upload(Request $req){
+        $result = $req->file('file')->store('/upload_xls');
+        rename(storage_path().'/app/'.$result,storage_path().'/app/upload_xls/'."AW-ATT-" . date('20y-m-d_h-i-s') . ".xls");
+        return ['result'=>$result];
     }
 }
