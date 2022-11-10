@@ -100,10 +100,10 @@ class AuthController extends Controller
         return $myFilesXlsx;
     }
     public function downloadXls($fileName){
-        return response()->download(storage_path().'/app/public/upload_xls/'.$fileName);
+        return response()->download(storage_path().'/app/upload_xls/'.$fileName);
     }
     public function downloadXlsx($fileName){
-            return response()->download(storage_path().'/app/public/generated_xlsx/'.$fileName);
+            return response()->download(storage_path().'/app/generated_xlsx/'.$fileName);
         }
     public function listXls(){
         $myDir = '../storage/app/upload_xls';
@@ -113,9 +113,29 @@ class AuthController extends Controller
         $myFiles = array_slice($myFiles,0,count($myFiles)-2);
         return $myFiles;
     }
+    public function ListFiles(){
+        $myDir = '../storage/app/upload_xls';
+        $myFiles = array();
+        $myFiles = scandir($myDir);
+        rsort($myFiles);
+        $myFiles = array_slice($myFiles,0,count($myFiles)-2);
+
+        $myDir = '../storage/app/generated_xlsx';
+        $myFilesXlsx = array();
+        $myFilesXlsx = scandir($myDir);
+        rsort($myFilesXlsx);
+        $myFilesXlsx = array_slice($myFilesXlsx,0,count($myFilesXlsx)-2);
+
+
+
+    }
     function upload(Request $req){
         $result = $req->file('file')->store('/upload_xls');
-        rename(storage_path().'/app/'.$result,storage_path().'/app/upload_xls/'."AW-ATT-" . date('20y-m-d_h-i-s') . ".xls");
+        $inputFileName = storage_path().'/app/upload_xls/'."AW-ATT-" . date('20y-m-d_h-i-s') . ".xls";
+        rename(storage_path().'/app/'.$result, $inputFileName);
+        exec('"C:\Program Files\LibreOffice\program\soffice.exe" --convert-to csv ' . $inputFileName, $output, $r);
+        $path_parts = pathinfo($inputFileName);
+        rename(public_path().'/'.$path_parts['filename'].'.csv',storage_path().'/app/csv/'.$path_parts['filename'].'.csv');
         return ['result'=>$result];
     }
 }
