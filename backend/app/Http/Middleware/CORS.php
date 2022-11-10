@@ -16,10 +16,16 @@ class CORS
      */
     public function handle(Request $request, Closure $next)
     {
-        header('Access-Control-Allow-Origin', '*');
-        header('Access-Control-Allow-Methods','*');
-        header('Access-Control-Allow-Headers','*');
-        return $next($request);
+        $response = $next( $request );
+        // $response->header( 'Access-Control-Allow-Origin', '*' );
+        // $response->header( 'Access-Control-Allow-Headers', 'Origin, Content-Type' );
+
+        $response->headers->add([
+            'Access-Control-Allow-Origin' => '*',
+            'Access-Control-Allow-Headers' => 'Origin, Content-Type, Authorization'
+        ]);
+
+        return $response;
     }
 }
 
