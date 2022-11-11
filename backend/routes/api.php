@@ -23,8 +23,8 @@ use GrahamCampbell\ResultType\Success;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::post('signup',[AuthController::class,'signup']);
-Route::post('login', [AuthController::class,'login']);
+Route::post('signup', [AuthController::class, 'signup']);
+Route::post('login', [AuthController::class, 'login']);
 Route::group([
 
     'middleware' => 'api'
@@ -32,9 +32,9 @@ Route::group([
 ], function ($router) {
 
 
-//    Route::post('logout', 'AuthController@logout');
-//    Route::post('refresh', 'AuthController@refresh');
-//    Route::post('me', 'AuthController@me');
+    //    Route::post('logout', 'AuthController@logout');
+    //    Route::post('refresh', 'AuthController@refresh');
+    //    Route::post('me', 'AuthController@me');
 
 });
 
@@ -84,13 +84,14 @@ Route::get('/generate/{fileName}', function ($fileName) {
 
 
     // $writer->save('../storage/app/public/upload_xls/hello world.xlsx');
-    $statusSucces = array('success'=>true);
+    $statusSucces = array('success' => true);
     // return json_encode($statusSucces);
-    return response($statusSucces,200);
+    return response($statusSucces, 200);
 });
 
-Route::get('/listxls', [AuthController::class,'listXls']);
-Route::get('/listxlsx',[AuthController::class,'listXlsx']);
-Route::get('/downloadxls/{fileName}', [AuthController::class,'downloadXls']);
-Route::get('/downloadxlsx/{fileName}', [AuthController::class,'downloadXlsx']);
-Route::post('/upload', [AuthController::class,'upload']);
+Route::get('/listxls', [AuthController::class, 'listXls']);
+Route::get('/listxlsx', [AuthController::class, 'listXlsx']);
+Route::get('/downloadxls/{fileName}', [AuthController::class, 'downloadXls']);
+Route::get('/downloadxlsx/{fileName}', [AuthController::class, 'downloadXlsx']);
+Route::post('/upload', [AuthController::class, 'upload']);
+Route::get('/listfiles', [AuthController::class, 'ListFiles']);
