@@ -1,0 +1,39 @@
+En cours 			= 	Inprogress
+Distribuer 			= 	distribute
+Non remis			= 	Not submitted
+Imprimer			= 	Print
+Réexpédition 		= 	Forwarding
+Réaffecter 			= 	Reassign
+
+Numéro de DNL    		= 	DNL number
+Nombre de courrier 	= 	Number of letters
+Secteur			= 	Sector
+Facteur			= 	Factor
+Supprimer			=	delete
+Produire			=	Produce
+Fichier			= 	file
+fermer			= 	close
+Numéro de suivi		=	Tracking number
+Suivre un courrier	=	follow a mail
+S'inscrire			=	sign up
+Etablir un devis		=	drawing up an estimate
+Rejeter			=	Reject
+
+
+var date1 = new Date("7/11/2010");
+var date2 = new Date("8/11/2010");
+var diffDays = parseInt((date2 - date1) / (1000 * 60 * 60 * 24), 10); 
+
+alert(diffDays )
+
+function pad2(n) {
+  return (n < 10 ? '0' : '') + n;
+}
+
+
+var date = new Date("7/11/2010");
+var month = pad2(date.getMonth()+1);//months (0-11)
+var day = pad2(date.getDate());//day (1-31)
+var year= date.getFullYear();
+var formattedDate =  day+"-"+month+"-"+year;
+alert(formattedDate);
